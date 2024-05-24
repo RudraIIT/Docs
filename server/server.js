@@ -5,14 +5,12 @@ mongoose.connect("mongodb://localhost:27017/google-docs-clone").then(() => {
     console.log("Connected to MongoDB")
 })
 
-const io = require("socket.io")(3001, {
+const io = require("socket.io")(8080, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 })
-
-const defaultValue = ""
 
 io.on("connection", socket => {
   socket.on("get-document", async documentId => {
@@ -35,5 +33,5 @@ async function findOrCreateDocument(id) {
 
   const document = await Document.findById(id)
   if (document) return document
-  return await Document.create({ _id: id, data: defaultValue })
+  return await Document.create({ _id: id, data: "" })
 }
